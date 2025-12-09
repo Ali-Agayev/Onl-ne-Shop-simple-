@@ -1,0 +1,12 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block title %}Çıxış{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2 class="auth-title">Çıxış etdiniz</h2>
+    <p>Hesabınızdan çıxış edildi.</p>
+    <a href="{% url 'accounts:login' %}" class="auth-btn">Yenidən Giriş</a>
+</div>
+{% endblock %}

@@ -8,3 +8,6 @@ def register_view(request):
 
 def logout_view(request):
     return render(request, "accounts/logout.html")
+
+def profile_view(request):
+    return render(request, "accounts/profile.html")

@@ -1,17 +1,9 @@
 {% extends 'products/base.html' %}
-{% load static %}
+{% load static %}  
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block content %}
-<div class="search-container">
-    <form method="GET" action="{% url 'products:category_detail' category.slug %}">
-        <input type="text" name="q" placeholder="Axtarış..." value="{{ request.GET.q }}">
-        <button type="submit" class="search-btn">Axtar</button>
-    </form>
-</div>
-
 <h2 class="page-title">{{ category.name }}</h2>
-
 <div class="product-grid">
     {% for product in products %}
     <a class="product-card" href="{% url 'products:product_detail' product.slug %}">

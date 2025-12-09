@@ -1,11 +1,15 @@
-const btn = document.getElementById('hamburger');
+document.addEventListener("DOMContentLoaded", function(){
+    const hamburger = document.getElementById("hamburger");
+    const sideMenu = document.getElementById("sideMenu");
 
+    hamburger.addEventListener("click", function(){
+        if(sideMenu.style.left === "0px"){sideMenu.style.left="-300px";}
+        else{sideMenu.style.left="0px";}
+    });
 
-btn.addEventListener('click', () => {
-    let form = document.getElementById('myForm');
-    if (form.style.display ==="none") {
-        form.style.display = "block";
-    } else {
-        form.style.display = "none";
-    }
+    document.addEventListener("click", function(e){
+        if(!sideMenu.contains(e.target) && !hamburger.contains(e.target)){
+            if(window.innerWidth < 992){ sideMenu.style.left="-300px"; }
+        }
+    });
 });

@@ -31,6 +31,7 @@ urlpatterns = [
 
     # Admin panel
     path('admin/', admin.site.urls),
+    
 ]
 
 # Media faylları üçün

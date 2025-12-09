@@ -1,0 +1,16 @@
+{% extends 'products/base.html' %}
+{% block title %}Qeydiyyat{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Qeydiyyatdan keç</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="İstifadəçi adı" class="input-box">
+        <input type="email" name="email" placeholder="Email" class="input-box">
+        <input type="password" name="password" placeholder="Şifrə" class="input-box">
+        <button type="submit" class="auth-btn">Qeydiyyatdan keç</button>
+    </form>
+    <p>Artıq hesabın var? <a href="{% url 'accounts:login' %}">Daxil ol</a></p>
+</div>
+{% endblock %}

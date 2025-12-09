@@ -1,20 +1,20 @@
 {% extends 'products/base.html' %}
-{% load static %}
-{% block title %}{{ product.name }}{% endblock %}
+{% load static %}  
+{% block title %}{{ category.name }}{% endblock %}
 
 {% block content %}
-<div class="product-detail">
-
-    {% if product.image %}
-        <img class="detail-img" src="{{ product.image.url }}" alt="{{ product.name }}">
-    {% else %}
-        <img class="detail-img" src="{% static 'products/img/no-image.png' %}" alt="No image">
-    {% endif %}
-
-    <h2>{{ product.name }}</h2>
-    <p class="detail-price">{{ product.price }} ₼</p>
-    <p class="detail-desc">{{ product.description }}</p>
-
-    <button class="add-cart">Səbətə əlavə et</button>
+<h2 class="page-title">{{ category.name }}</h2>
+<div class="product-grid">
+    {% for product in products %}
+    <a class="product-card" href="{% url 'products:product_detail' product.slug %}">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <img src="{% static 'products/img/no-image.png' %}" alt="No image">
+        {% endif %}
+        <p class="product-name">{{ product.name }}</p>
+        <p class="product-price">{{ product.price }} ₼</p>
+    </a>
+    {% endfor %}
 </div>
 {% endblock %}
