@@ -1,0 +1,23 @@
+{% extends 'products/base.html' %}
+
+{% block title %}Sifariş - MyShop{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding-top: 50px;">
+    <h2>Təbriklər!</h2>
+    <p>Sifarişiniz qəbul edildi və emal olunur.</p>
+
+    {% if order %}
+    <div style="margin: 20px 0; padding: 20px; border: 1px solid #ddd; display: inline-block;">
+        <p>Sifariş nömrəsi: <strong>#{{ order.id }}</strong></p>
+        <p>Məbləğ: <strong>{{ order.total_price }} AZN</strong></p>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 30px;">
+        <a href="{% url 'products:product_list' %}" class="btn"
+            style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Əsas
+            səhifəyə qayıt</a>
+    </div>
+</div>
+{% endblock %}

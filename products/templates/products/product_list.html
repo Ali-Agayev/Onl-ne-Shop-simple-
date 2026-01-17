@@ -1,9 +1,16 @@
 {% extends 'products/base.html' %}
-{% load static %}  
+{% load static %}
 {% block title %}Bütün Məhsullar{% endblock %}
 
 {% block content %}
+<div class="search-container">
+    <form method="GET" action="{% url 'products:product_list' %}">
+        <input type="text" name="q" placeholder="Axtarış..." value="{{ request.GET.q }}">
+    </form>
+</div>
+
 <h2 class="page-title">Məhsullar</h2>
+
 <div class="product-grid">
     {% for product in products %}
     <a class="product-card" href="{% url 'products:product_detail' product.slug %}">

@@ -1,77 +1,46 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MyShop{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'products/css/style.css' %}">
 </head>
+
 <body>
 
-<!-- HEADER 1 -->
-<header class="top-header">
-    <button id="hamburger">&#9776;</button>
-    <div class="logo">
-        <a href="{% url 'products:product_list' %}">MyShop</a>
-    </div>
-</header>
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="logo">MyShop</div>
+        <div class="menu-btn" onclick="toggleSidebar()">&#9776;</div> <!-- Hamburger -->
+    </header>
 
-<!-- HEADER 2 (desktop) -->
-<nav class="bottom-header">
-    <div class="nav-left">
-        <a href="#">Haqqında</a>
-        <a href="#">Yeni Ögələr</a>
-        <a href="#">Təslimat</a>
-        <a href="#">İş Birliyi</a>
-        <a href="#">Mağaza & Əlaqə</a>
-    </div>
-</nav>
-
-<!-- SIDEBAR -->
-<aside id="sideMenu" class="side-menu">
-    <div class="menu-top">
-        <div class="logo">
-            <a href="{% url 'products:product_list' %}">MyShop</a>
-        </div>
-        <a href="tel:+994000000000" class="phone">+994 00 000 00 00</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'accounts:profile' %}" class="profile">Profil</a>
-            <a href="{% url 'accounts:logout' %}" class="logout">Çıxış</a>
-        {% else %}
-            <a href="{% url 'accounts:login' %}" class="login">Daxil ol</a>
-            <a href="{% url 'accounts:register' %}" class="register">Qeydiyyat</a>
-        {% endif %}
+    <!-- SIDEBAR -->
+    <div id="sideMenu" class="side-menu">
+        <div class="close-btn" onclick="toggleSidebar()">✖</div>
+        <h3>Kateqoriyalar</h3>
+        <ul>
+            {% for cat in categories %}
+            <li><a href="{% url 'products:category_detail' cat.slug %}">{{ cat.name }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
 
-    <h3>Kateqoriyalar</h3>
-    <div class="category-list">
-        {% for cat in categories %}
-            <a href="{% url 'products:category_detail' cat.slug %}" class="category-item">{{ cat.name }}</a>
-        {% endfor %}
+    <!-- PAGE CONTENT -->
+    <div class="page-content">
+        {% block content %}{% endblock %}
     </div>
 
-    <div class="nav-links">
-        <a href="#">Haqqında</a>
-        <a href="#">Yeni Ögələr</a>
-        <a href="#">Təslimat</a>
-        <a href="#">İş Birliyi</a>
-        <a href="#">Mağaza & Əlaqə</a>
+    <!-- BOTTOM NAVBAR -->
+    <div class="bottom-nav">
+        <a href="{% url 'products:product_list' %}" class="nav-icon">&#127968;</a> <!-- Ev -->
+        <a href="{% url 'orders:cart_detail' %}" class="nav-icon">&#128722;</a> <!-- Səbət -->
+        <a href="{% url 'accounts:profile' %}" class="nav-icon">&#128100;</a> <!-- Profil -->
     </div>
-</aside>
 
-<!-- PAGE CONTENT -->
-<main class="page-content">
-    {% block content %}{% endblock %}
-</main>
-
-<!-- STICKY SIDE ICONS (desktop) -->
-<div class="sticky-icons">
-    <a href="#" class="cart">&#128722;</a>
-    <a href="#" class="wishlist">&#10084;</a>
-    <a href="#" class="compare">&#128200;</a>
-</div>
-
-<script src="{% static 'products/js/script.js' %}"></script>
+    <script src="{% static 'products/js/script.js' %}"></script>
 </body>
+
 </html>

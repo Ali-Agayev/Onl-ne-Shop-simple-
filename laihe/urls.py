@@ -20,9 +20,19 @@ from django.shortcuts import redirect
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework.routers import DefaultRouter
+from products.api_views import ProductViewSet, CategoryViewSet
+
+router = DefaultRouter()
+router.register(r'products', ProductViewSet, basename='api-product')
+router.register(r'categories', CategoryViewSet, basename='api-category')
+
 urlpatterns = [
     # Root URL -> products list page
     path('', lambda request: redirect('products:product_list'), name='home'),
+
+    # API URL-ləri
+    path('api/', include(router.urls)),
 
     # App URL-ləri
     path('accounts/', include('accounts.urls')),
@@ -31,7 +41,6 @@ urlpatterns = [
 
     # Admin panel
     path('admin/', admin.site.urls),
-    
 ]
 
 # Media faylları üçün

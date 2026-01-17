@@ -2,14 +2,9 @@
 {% block title %}Profil{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <h2>Profilim</h2>
-    <div class="profile-info">
-        <p><strong>İstifadəçi adı:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Telefon:</strong> {{ user.phone }}</p>
-        <p><strong>Ünvan:</strong> {{ user.address }}</p>
-    </div>
-    <a href="{% url 'accounts:logout' %}" class="auth-btn">Çıxış</a>
+<div class="profile">
+    <p><b>Username:</b> {{ user.username }}</p>
+    <p><b>Email:</b> {{ user.email }}</p>
+    <a href="{% url 'accounts:logout' %}">Çıxış</a>
 </div>
 {% endblock %}
