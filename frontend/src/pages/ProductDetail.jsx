@@ -78,7 +78,11 @@ const ProductDetail = () => {
                     </div>
 
                     <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem' }}>
-                        <button className="bg-gradient" style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', padding: '1.25rem', borderRadius: '16px', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                        <button
+                            onClick={() => alert("Məhsul səbətə əlavə olundu! (Demo)")}
+                            className="bg-gradient"
+                            style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', padding: '1.25rem', borderRadius: '16px', fontSize: '1.2rem', fontWeight: 'bold' }}
+                        >
                             <ShoppingCart /> Səbətə at
                         </button>
                     </div>

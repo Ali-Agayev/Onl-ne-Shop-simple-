@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import ProductCard from '../components/ProductCard'
 import { Loader2 } from 'lucide-react'
@@ -10,6 +10,7 @@ const Home = () => {
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
     const query = searchParams.get('q') || ''
     const category = searchParams.get('category') || ''
 
@@ -50,7 +51,7 @@ const Home = () => {
             {/* Categories Filter */}
             <div style={{ display: 'flex', gap: '1rem', overflowX: 'auto', paddingBottom: '2rem', marginBottom: '2rem' }}>
                 <button
-                    onClick={() => window.location.href = '/'}
+                    onClick={() => navigate('/')}
                     className={!category ? 'bg-gradient' : ''}
                     style={{ padding: '0.5rem 1.5rem', borderRadius: '99px', border: '1px solid var(--border)', whiteSpace: 'nowrap', backgroundColor: !category ? 'var(--primary)' : 'transparent' }}
                 >
@@ -59,7 +60,7 @@ const Home = () => {
                 {categories.map(cat => (
                     <button
                         key={cat.id}
-                        onClick={() => window.location.href = `/?category=${cat.slug}`}
+                        onClick={() => navigate(`/?category=${cat.slug}`)}
                         className={category === cat.slug ? 'bg-gradient' : ''}
                         style={{ padding: '0.5rem 1.5rem', borderRadius: '99px', border: '1px solid var(--border)', whiteSpace: 'nowrap', backgroundColor: category === cat.slug ? 'var(--primary)' : 'transparent' }}
                     >
