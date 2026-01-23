@@ -103,11 +103,13 @@ const Cart = () => {
                                     className="glass"
                                     style={{ padding: '1.5rem', borderRadius: '20px', display: 'flex', gap: '1.5rem', alignItems: 'center' }}
                                 >
-                                    <div style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', background: 'white' }}>
+                                    <Link to={`/product/${item.product.slug}`} style={{ width: '100px', height: '100px', borderRadius: '12px', overflow: 'hidden', background: 'white', flexShrink: 0 }}>
                                         <img src={item.product.image || 'https://via.placeholder.com/100'} alt={item.product.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                    </div>
+                                    </Link>
                                     <div style={{ flex: 1 }}>
-                                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.25rem' }}>{item.product.name}</h3>
+                                        <Link to={`/product/${item.product.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.25rem' }}>{item.product.name}</h3>
+                                        </Link>
                                         <p className="text-muted" style={{ fontSize: '0.9rem' }}>{item.quantity} ədəd x {item.product.price} ₼</p>
                                     </div>
                                     <div style={{ textAlign: 'right' }}>
