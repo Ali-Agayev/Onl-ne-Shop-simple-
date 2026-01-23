@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Search, User, Menu, X, LogOut } from 'lucide-react'
+import { ShoppingCart, Search, User, Menu, X, LogOut, Phone, MapPin, Heart, BarChart2 } from 'lucide-react'
 import api from '../api/axios'
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [cartCount, setCartCount] = useState(0)
     const [userData, setUserData] = useState(null)
@@ -51,65 +50,105 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="glass" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, height: '80px', display: 'flex', alignItems: 'center' }}>
-            <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                <Link to="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', letterSpacing: '-1px' }}>
-                    LAI<span className="text-gradient">HE</span>
-                </Link>
-
-                {/* Desktop Nav */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                    <form onSubmit={handleSearch} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                        <input
-                            type="text"
-                            placeholder="Axtar..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{
-                                background: 'var(--surface)',
-                                border: '1px solid var(--border)',
-                                color: 'var(--text)',
-                                padding: '0.5rem 1rem 0.5rem 2.5rem',
-                                borderRadius: '99px',
-                                width: '240px',
-                                outline: 'none'
-                            }}
-                        />
-                        <Search size={18} style={{ position: 'absolute', left: '12px', color: 'var(--text-muted)' }} />
-                    </form>
-
+        <div style={{ width: '100%', zIndex: 1000, backgroundColor: '#fff' }}>
+            {/* Top Bar */}
+            <div style={{ borderBottom: '1px solid #eee', padding: '0.5rem 0', fontSize: '0.85rem', color: '#666' }}>
+                <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                        {userData?.is_staff && (
-                            <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.9rem', fontWeight: '600', color: 'var(--primary)' }}>
-                                Admin
-                            </a>
-                        )}
-                        <Link to="/cart" style={{ position: 'relative' }}>
-                            <ShoppingCart size={22} />
-                            {cartCount > 0 && (
-                                <span style={{ position: 'absolute', top: '-8px', right: '-8px', background: 'var(--primary)', color: 'white', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '50%' }}>
-                                    {cartCount}
-                                </span>
-                            )}
-                        </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <MapPin size={14} /> <span>Bakı şəhəri</span>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                            <Phone size={14} color="#a91260" />
+                            <span style={{ fontWeight: 'bold', color: '#333' }}>+994 50 123 45 67</span>
+                        </div>
                         {isLoggedIn ? (
-                            <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--text)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                                <LogOut size={22} />
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <span style={{ fontWeight: '500' }}>{userData?.username}</span>
+                                <button onClick={handleLogout}><LogOut size={16} /></button>
+                            </div>
                         ) : (
-                            <Link to="/login">
-                                <User size={22} />
+                            <Link to="/login" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                <User size={14} /> <span>Daxil ol</span>
                             </Link>
                         )}
                     </div>
                 </div>
-
-                {/* Mobile menu toggle */}
-                <button style={{ display: 'none' }} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? <X /> : <Menu />}
-                </button>
             </div>
-        </nav>
+
+            {/* Main Header */}
+            <div style={{ padding: '1.5rem 0' }}>
+                <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
+                    <Link to="/" style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '-1.5px', color: '#000' }}>
+                        MAISON <span style={{ color: '#a91260' }}>D'OR</span>
+                    </Link>
+
+                    <form onSubmit={handleSearch} style={{ flex: 1, maxWidth: '600px', position: 'relative' }}>
+                        <input
+                            type="text"
+                            placeholder="Məhsul axtarın..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.8rem 1.5rem',
+                                paddingRight: '3rem',
+                                borderRadius: '4px',
+                                border: '1px solid #ddd',
+                                backgroundColor: '#f9f9f9',
+                                outline: 'none'
+                            }}
+                        />
+                        <button type="submit" style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)' }}>
+                            <Search size={20} color="#666" />
+                        </button>
+                    </form>
+
+                    <div style={{ display: 'flex', gap: '1.5rem' }}>
+                        {userData?.is_staff && (
+                            <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" style={{ color: '#a91260', fontWeight: 'bold' }}>ADMIN</a>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Nav Menu */}
+            <div style={{ borderTop: '1px solid #eee', borderBottom: '1px solid #eee' }}>
+                <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
+                    <div style={{ backgroundColor: '#f9f9f9', padding: '1rem 2rem', borderRight: '1px solid #eee', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.8rem', fontWeight: 'bold' }}>
+                        <Menu size={20} /> KATALOG
+                    </div>
+                    <div style={{ display: 'flex', gap: '2rem', fontWeight: '500', fontSize: '0.95rem' }}>
+                        <Link to="/">ANA SƏHİFƏ</Link>
+                        <Link to="/">YENİ MƏHSULLAR</Link>
+                        <Link to="/">ENDİRİMLƏR</Link>
+                        <Link to="/">ÇATDIRILMA</Link>
+                        <Link to="/">ƏLAQƏ</Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Floating Sidebar */}
+            <div className="floating-side-nav">
+                <Link to="/cart" className="side-nav-item">
+                    <ShoppingCart size={22} />
+                    <span>Səbət</span>
+                    {cartCount > 0 && <span className="badge">{cartCount}</span>}
+                </Link>
+                <div className="side-nav-item">
+                    <Heart size={22} />
+                    <span>İstək</span>
+                    <span className="badge">0</span>
+                </div>
+                <div className="side-nav-item">
+                    <BarChart2 size={22} />
+                    <span>Müqayisə</span>
+                    <span className="badge">0</span>
+                </div>
+            </div>
+        </div>
     )
 }
 

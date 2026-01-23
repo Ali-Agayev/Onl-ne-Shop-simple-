@@ -1,51 +1,89 @@
-
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ShoppingCart, Plus } from 'lucide-react'
+import { ShoppingCart, Eye, Heart } from 'lucide-react'
 
 const ProductCard = ({ product, delay }) => {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: delay }}
-            className="glass"
             style={{
                 position: 'relative',
-                borderRadius: '24px',
+                backgroundColor: '#fff',
+                border: '1px solid #eee',
+                borderRadius: '4px',
                 overflow: 'hidden',
-                transition: 'transform 0.3s ease'
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                transition: 'box-shadow 0.3s'
             }}
-            whileHover={{ y: -10 }}
+            whileHover={{ boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}
         >
-            <div style={{ position: 'relative', height: '300px', overflow: 'hidden' }}>
+            <Link to={`/product/${product.slug}`} style={{ position: 'relative', height: '280px', overflow: 'hidden', display: 'block' }}>
                 <img
                     src={product.image || 'https://via.placeholder.com/300'}
                     alt={product.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1rem' }}
                 />
-                <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-                    <span className="glass" style={{ padding: '0.25rem 0.75rem', borderRadius: '99px', fontSize: '0.8rem' }}>
-                        {product.category_name}
-                    </span>
+
+                {/* Hover overlays */}
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
+                    opacity: 0,
+                    transition: 'opacity 0.2s',
+                }}
+                    className="card-overlay"
+                >
+                    <div style={{ backgroundColor: '#fff', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+                        <Heart size={20} color="#666" />
+                    </div>
                 </div>
-            </div>
+            </Link>
 
-            <div style={{ padding: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{product.name}</h3>
-                <p className="text-muted" style={{ fontSize: '0.9rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginBottom: '1rem' }}>
-                    {product.description}
-                </p>
+            <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <Link to={`/?category=${product.category?.slug}`} style={{ fontSize: '0.75rem', color: '#999', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                    {product.category_name}
+                </Link>
+                <Link to={`/product/${product.slug}`} style={{ fontSize: '1rem', fontWeight: '500', marginBottom: '1rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '2.4em' }}>
+                    {product.name}
+                </Link>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--primary)' }}>
-                        {product.price} AZN
-                    </span>
-                    <Link to={`/product/${product.slug}`} className="bg-gradient" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.25rem', borderRadius: '12px', fontWeight: 'bold' }}>
-                        Bax
+                <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                        <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#a91260' }}>
+                            {product.price} ₼
+                        </span>
+                    </div>
+                    <Link to={`/product/${product.slug}`} style={{
+                        color: '#666',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '1px solid #ddd',
+                        padding: '0.5rem',
+                        borderRadius: '4px'
+                    }}>
+                        <Eye size={18} />
                     </Link>
                 </div>
             </div>
+
+            <style>{`
+                div:hover > .card-overlay {
+                    opacity: 1 !important;
+                }
+            `}</style>
         </motion.div>
     )
 }
