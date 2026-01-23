@@ -1,17 +1,42 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Search, User, Menu, X } from 'lucide-react'
+import { ShoppingCart, Search, User, Menu, X, LogOut } from 'lucide-react'
+import api from '../api/axios'
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
+    const [cartCount, setCartCount] = useState(0)
     const navigate = useNavigate()
+    const isLoggedIn = !!localStorage.getItem('access_token')
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            fetchCartCount()
+        }
+    }, [isLoggedIn])
+
+    const fetchCartCount = async () => {
+        try {
+            const res = await api.get('orders/cart/')
+            setCartCount(res.data.items.length)
+        } catch (error) {
+            console.error("Error fetching cart count:", error)
+        }
+    }
 
     const handleSearch = (e) => {
         e.preventDefault()
         if (searchQuery.trim()) {
             navigate(`/?q=${searchQuery}`)
         }
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        navigate('/login')
+        window.location.reload()
     }
 
     return (
@@ -45,11 +70,21 @@ const Navbar = () => {
                     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                         <Link to="/cart" style={{ position: 'relative' }}>
                             <ShoppingCart size={22} />
-                            <span style={{ position: 'absolute', top: '-8px', right: '-8px', background: 'var(--primary)', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '50%' }}>0</span>
+                            {cartCount > 0 && (
+                                <span style={{ position: 'absolute', top: '-8px', right: '-8px', background: 'var(--primary)', color: 'white', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '50%' }}>
+                                    {cartCount}
+                                </span>
+                            )}
                         </Link>
-                        <Link to="/login">
-                            <User size={22} />
-                        </Link>
+                        {isLoggedIn ? (
+                            <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--text)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                                <LogOut size={22} />
+                            </button>
+                        ) : (
+                            <Link to="/login">
+                                <User size={22} />
+                            </Link>
+                        )}
                     </div>
                 </div>
 

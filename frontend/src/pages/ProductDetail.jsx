@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import axios from 'axios'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import api from '../api/axios'
 import { Loader2, ArrowLeft, ShoppingCart, ShieldCheck, Truck } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const ProductDetail = () => {
     const { slug } = useParams()
+    const navigate = useNavigate()
     const [product, setProduct] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [cartLoading, setCartLoading] = useState(false)
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/products/${slug}/`)
+                const response = await api.get(`products/${slug}/`)
                 setProduct(response.data)
             } catch (error) {
                 console.error("Error fetching product:", error)
@@ -22,6 +24,23 @@ const ProductDetail = () => {
         }
         fetchProduct()
     }, [slug])
+
+    const addToCart = async () => {
+        if (!localStorage.getItem('access_token')) {
+            navigate('/login')
+            return
+        }
+        setCartLoading(true)
+        try {
+            await api.post('orders/add_to_cart/', { product_id: product.id, quantity: 1 })
+            navigate('/cart')
+        } catch (error) {
+            console.error("Error adding to cart:", error)
+            alert("Məhsul səbətə əlavə edilərkən xəta baş verdi.")
+        } finally {
+            setCartLoading(false)
+        }
+    }
 
     if (loading) return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
@@ -79,11 +98,12 @@ const ProductDetail = () => {
 
                     <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem' }}>
                         <button
-                            onClick={() => alert("Məhsul səbətə əlavə olundu! (Demo)")}
+                            onClick={addToCart}
+                            disabled={cartLoading}
                             className="bg-gradient"
-                            style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', padding: '1.25rem', borderRadius: '16px', fontSize: '1.2rem', fontWeight: 'bold' }}
+                            style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', padding: '1.25rem', borderRadius: '16px', fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer', opacity: cartLoading ? 0.7 : 1 }}
                         >
-                            <ShoppingCart /> Səbətə at
+                            {cartLoading ? <Loader2 className="animate-spin" /> : <><ShoppingCart /> Səbətə at</>}
                         </button>
                     </div>
 

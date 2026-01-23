@@ -1,17 +1,33 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { User, Lock, ArrowRight } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { User, Lock, ArrowRight, Loader2 } from 'lucide-react'
+import api from '../api/axios'
 
 const Login = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: ''
     })
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // Here we would handle the actual login logic
-        console.log('Login attempt:', formData)
+        setLoading(true)
+        setError('')
+        try {
+            const response = await api.post('accounts/login/', formData)
+            localStorage.setItem('access_token', response.data.access)
+            localStorage.setItem('refresh_token', response.data.refresh)
+            navigate('/')
+            window.location.reload() // Refresh to update navbar state if any
+        } catch (err) {
+            setError('İstifadəçi adı və ya şifrə yanlışdır')
+            console.error('Login error:', err)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -35,6 +51,11 @@ const Login = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {error && (
+                        <div style={{ color: 'var(--error)', backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', textAlign: 'center' }}>
+                            {error}
+                        </div>
+                    )}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         <label style={{ fontWeight: '500' }}>İstifadəçi adı</label>
                         <div style={{ position: 'relative' }}>
@@ -42,6 +63,7 @@ const Login = () => {
                             <input
                                 type="text"
                                 placeholder="adınız"
+                                required
                                 value={formData.username}
                                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                                 style={{
@@ -65,6 +87,7 @@ const Login = () => {
                             <input
                                 type="password"
                                 placeholder="••••••••"
+                                required
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 style={{
@@ -88,7 +111,7 @@ const Login = () => {
                         <Link to="/forgot-password" style={{ color: 'var(--primary)' }}>Şifrəni unutmusan?</Link>
                     </div>
 
-                    <button type="submit" className="bg-gradient" style={{
+                    <button type="submit" className="bg-gradient" disabled={loading} style={{
                         padding: '1rem',
                         borderRadius: '12px',
                         color: 'white',
@@ -99,9 +122,11 @@ const Login = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        transition: 'opacity 0.2s'
+                        transition: 'opacity 0.2s',
+                        opacity: loading ? 0.7 : 1,
+                        cursor: loading ? 'not-allowed' : 'pointer'
                     }}>
-                        Daxil ol <ArrowRight size={20} />
+                        {loading ? <Loader2 className="animate-spin" size={20} /> : <>Daxil ol <ArrowRight size={20} /></>}
                     </button>
                 </form>
 

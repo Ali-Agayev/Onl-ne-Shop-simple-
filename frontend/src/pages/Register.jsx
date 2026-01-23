@@ -1,18 +1,31 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { User, Lock, Mail, ArrowRight } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { User, Lock, Mail, ArrowRight, Loader2 } from 'lucide-react'
+import api from '../api/axios'
 
 const Register = () => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
-        confirmPassword: ''
     })
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Register attempt:', formData)
+        setLoading(true)
+        setError('')
+        try {
+            await api.post('accounts/register/', formData)
+            navigate('/login')
+        } catch (err) {
+            setError(err.response?.data?.username || err.response?.data?.email || 'Qeydiyyat zamanı xəta baş verdi')
+            console.error('Register error:', err)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -36,6 +49,11 @@ const Register = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    {error && (
+                        <div style={{ color: 'var(--error)', backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', textAlign: 'center' }}>
+                            {error}
+                        </div>
+                    )}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         <label style={{ fontWeight: '500' }}>İstifadəçi adı</label>
                         <div style={{ position: 'relative' }}>
@@ -43,6 +61,7 @@ const Register = () => {
                             <input
                                 type="text"
                                 placeholder="adınız"
+                                required
                                 value={formData.username}
                                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                                 style={{
@@ -66,6 +85,7 @@ const Register = () => {
                             <input
                                 type="email"
                                 placeholder="nümunə@mail.com"
+                                required
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 style={{
@@ -89,6 +109,7 @@ const Register = () => {
                             <input
                                 type="password"
                                 placeholder="••••••••"
+                                required
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 style={{
@@ -105,7 +126,7 @@ const Register = () => {
                         </div>
                     </div>
 
-                    <button type="submit" className="bg-gradient" style={{
+                    <button type="submit" className="bg-gradient" disabled={loading} style={{
                         padding: '1rem',
                         borderRadius: '12px',
                         color: 'white',
@@ -116,9 +137,11 @@ const Register = () => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '0.5rem',
-                        transition: 'opacity 0.2s'
+                        transition: 'opacity 0.2s',
+                        opacity: loading ? 0.7 : 1,
+                        cursor: loading ? 'not-allowed' : 'pointer'
                     }}>
-                        Qeydiyyatdan keç <ArrowRight size={20} />
+                        {loading ? <Loader2 className="animate-spin" size={20} /> : <>Qeydiyyatdan keç <ArrowRight size={20} /></>}
                     </button>
                 </form>
 

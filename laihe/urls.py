@@ -28,16 +28,10 @@ router.register(r'products', ProductViewSet, basename='api-product')
 router.register(r'categories', CategoryViewSet, basename='api-category')
 
 urlpatterns = [
-    # Root URL -> products list page
-    path('', lambda request: redirect('products:product_list'), name='home'),
-
     # API URL-ləri
     path('api/', include(router.urls)),
-
-    # App URL-ləri
-    path('accounts/', include('accounts.urls')),
-    path('orders/', include('orders.urls')),
-    path('products/', include(('products.urls', 'products'), namespace='products')),
+    path('api/accounts/', include('accounts.urls')),
+    path('api/orders/', include('orders.urls')),
 
     # Admin panel
     path('admin/', admin.site.urls),

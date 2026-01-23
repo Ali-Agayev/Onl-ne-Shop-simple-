@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api/axios'
 import ProductCard from '../components/ProductCard'
 import { Loader2 } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -19,8 +19,8 @@ const Home = () => {
             setLoading(true)
             try {
                 const [prodRes, catRes] = await Promise.all([
-                    axios.get(`http://127.0.0.1:8000/api/products/?search=${query}&category__slug=${category}`),
-                    axios.get('http://127.0.0.1:8000/api/categories/')
+                    api.get(`products/?search=${query}&category__slug=${category}`),
+                    api.get('categories/')
                 ])
                 setProducts(prodRes.data)
                 setCategories(catRes.data)
