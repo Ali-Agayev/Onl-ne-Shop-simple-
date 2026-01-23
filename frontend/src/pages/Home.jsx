@@ -35,9 +35,9 @@ const Home = () => {
 
     return (
         <div style={{ backgroundColor: '#fff' }}>
-            <div className="container" style={{ display: 'flex', gap: '2rem', padding: '2rem 1.5rem' }}>
-                {/* Sidebar Categories */}
-                <aside style={{ width: '280px', flexShrink: 0 }}>
+            <div className="container main-layout" style={{ display: 'flex', gap: '2rem', padding: '2rem 1.5rem' }}>
+                {/* Sidebar Categories - Hidden on Mobile */}
+                <aside className="sidebar" style={{ width: '280px', flexShrink: 0 }}>
                     <div style={{ border: '1px solid #eee', borderRadius: '4px', overflow: 'hidden' }}>
                         {categories.map(cat => (
                             <div
@@ -69,19 +69,19 @@ const Home = () => {
                 <main style={{ flex: 1 }}>
                     {/* Hero Slider Mockup */}
                     {!category && !query && (
-                        <div style={{ position: 'relative', width: '100%', height: '450px', backgroundColor: '#f5f5f5', borderRadius: '4px', overflow: 'hidden', marginBottom: '3rem' }}>
+                        <div className="hero-slider" style={{ position: 'relative', width: '100%', height: '450px', backgroundColor: '#f5f5f5', borderRadius: '4px', overflow: 'hidden', marginBottom: '3rem' }}>
                             <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=1000" alt="Hero" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             <div style={{ position: 'absolute', left: '10%', top: '50%', transform: 'translateY(-50%)', maxWidth: '400px' }}>
-                                <h1 style={{ fontSize: '3rem', marginBottom: '1rem', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>Yeni Kolleksiya</h1>
+                                <h1 style={{ fontSize: '3rem', marginBottom: '1rem', color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.3)' }} className="hero-title">Yeni Kolleksiya</h1>
                                 <button className="bg-gradient" style={{ padding: '1rem 2rem', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '4px' }}>İndi Al</button>
                             </div>
-                            <div style={{ position: 'absolute', top: '50%', left: '1rem', width: '40px', height: '40px', backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transform: 'translateY(-50%)' }}><ChevronLeft /></div>
-                            <div style={{ position: 'absolute', top: '50%', right: '1rem', width: '40px', height: '40px', backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transform: 'translateY(-50%)' }}><ChevronRight /></div>
+                            <div className="slider-arrow" style={{ position: 'absolute', top: '50%', left: '1rem', width: '40px', height: '40px', backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transform: 'translateY(-50%)' }}><ChevronLeft /></div>
+                            <div className="slider-arrow" style={{ position: 'absolute', top: '50%', right: '1rem', width: '40px', height: '40px', backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transform: 'translateY(-50%)' }}><ChevronRight /></div>
                         </div>
                     )}
 
                     <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                        <h2 style={{ fontSize: '1.8rem' }}>{category ? categories.find(c => c.slug === category)?.name : (query ? `"${query}" üçün nəticələr` : 'Seçilmiş Məhsullar')}</h2>
+                        <h2 style={{ fontSize: '1.8rem' }} className="section-header">{category ? categories.find(c => c.slug === category)?.name : (query ? `"${query}" üçün nəticələr` : 'Seçilmiş Məhsullar')}</h2>
                         {!loading && <span style={{ color: '#999', fontSize: '0.9rem' }}>{products.length} məhsul tapıldı</span>}
                     </div>
 
@@ -90,7 +90,7 @@ const Home = () => {
                             <Loader2 className="animate-spin" size={48} color="var(--primary)" />
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1.5rem' }}>
+                        <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1.5rem' }}>
                             {products.map((product, idx) => (
                                 <ProductCard key={product.id} product={product} delay={idx * 0.05} />
                             ))}
@@ -105,7 +105,7 @@ const Home = () => {
 
                     {/* Secondary banners */}
                     {!category && !query && (
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '4rem' }}>
+                        <div className="banner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '4rem' }}>
                             <div style={{ position: 'relative', height: '250px', overflow: 'hidden', borderRadius: '4px' }}>
                                 <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&q=80&w=800" alt="B1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                 <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', background: '#a91260', color: 'white', padding: '0.5rem 1rem', fontWeight: 'bold' }}>Xalatlar</div>
@@ -118,6 +118,19 @@ const Home = () => {
                     )}
                 </main>
             </div>
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .main-layout { flex-direction: column !important; gap: 1rem !important; padding: 1rem !important; }
+                    .sidebar { display: none !important; }
+                    .hero-slider { height: 200px !important; margin-bottom: 1.5rem !important; }
+                    .hero-title { font-size: 1.5rem !important; }
+                    .product-grid { grid-template-columns: 1fr 1fr !important; gap: 0.5rem !important; }
+                    .banner-grid { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
+                    .section-header { font-size: 1.1rem !important; }
+                    .slider-arrow { width: 30px !important; height: 30px !important; }
+                }
+            `}</style>
         </div>
     )
 }

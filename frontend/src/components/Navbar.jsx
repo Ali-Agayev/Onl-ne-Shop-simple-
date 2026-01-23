@@ -50,9 +50,9 @@ const Navbar = () => {
     }
 
     return (
-        <div style={{ width: '100%', zIndex: 1000, backgroundColor: '#fff' }}>
-            {/* Top Bar */}
-            <div style={{ borderBottom: '1px solid #eee', padding: '0.5rem 0', fontSize: '0.85rem', color: '#666' }}>
+        <div style={{ width: '100%', zIndex: 1000, backgroundColor: '#fff', position: 'sticky', top: 0, boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+            {/* Desktop Top Bar - Hidden on Mobile */}
+            <div className="desktop-only" style={{ borderBottom: '1px solid #eee', padding: '0.5rem 0', fontSize: '0.85rem', color: '#666' }}>
                 <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -78,8 +78,20 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Main Header */}
-            <div style={{ padding: '1.5rem 0' }}>
+            {/* Mobile Header - Visible only on Mobile */}
+            <div className="mobile-only" style={{ padding: '0.75rem 1rem', display: 'none', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #eee' }}>
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)}><Menu size={24} /></button>
+                <Link to="/" style={{ fontSize: '1.2rem', fontWeight: 'bold', letterSpacing: '-1px' }}>
+                    MAISON <span style={{ color: '#a91260' }}>D'OR</span>
+                </Link>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <a href="tel:+994501234567"><Phone size={22} /></a>
+                    <button onClick={() => navigate('/?search=open')}><Search size={22} /></button>
+                </div>
+            </div>
+
+            {/* Main Header - Desktop Only */}
+            <div className="desktop-only" style={{ padding: '1.5rem 0' }}>
                 <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '2rem' }}>
                     <Link to="/" style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '-1.5px', color: '#000' }}>
                         MAISON <span style={{ color: '#a91260' }}>D'OR</span>
@@ -106,16 +118,20 @@ const Navbar = () => {
                         </button>
                     </form>
 
-                    <div style={{ display: 'flex', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                         {userData?.is_staff && (
                             <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" style={{ color: '#a91260', fontWeight: 'bold' }}>ADMIN</a>
                         )}
+                        <Link to="/cart" style={{ position: 'relative' }}>
+                            <ShoppingCart size={24} />
+                            {cartCount > 0 && <span className="badge" style={{ top: '-5px', right: '-10px' }}>{cartCount}</span>}
+                        </Link>
                     </div>
                 </div>
             </div>
 
-            {/* Nav Menu */}
-            <div style={{ borderTop: '1px solid #eee', borderBottom: '1px solid #eee' }}>
+            {/* Nav Menu - Desktop Only */}
+            <div className="desktop-only" style={{ borderTop: '1px solid #eee', borderBottom: '1px solid #eee' }}>
                 <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
                     <div style={{ backgroundColor: '#f9f9f9', padding: '1rem 2rem', borderRight: '1px solid #eee', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.8rem', fontWeight: 'bold' }}>
                         <Menu size={20} /> KATALOG
@@ -130,24 +146,54 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Floating Sidebar */}
+            {/* Floating Sidebar - Responsive adjustments via CSS */}
             <div className="floating-side-nav">
                 <Link to="/cart" className="side-nav-item">
                     <ShoppingCart size={22} />
-                    <span>Səbət</span>
+                    <span className="nav-text">Səbət</span>
                     {cartCount > 0 && <span className="badge">{cartCount}</span>}
                 </Link>
                 <div className="side-nav-item">
                     <Heart size={22} />
-                    <span>İstək</span>
+                    <span className="nav-text">İstək</span>
                     <span className="badge">0</span>
                 </div>
                 <div className="side-nav-item">
                     <BarChart2 size={22} />
-                    <span>Müqayisə</span>
+                    <span className="nav-text">Müqayisə</span>
                     <span className="badge">0</span>
                 </div>
             </div>
+
+            {/* Mobile Menu Drawer */}
+            {isMenuOpen && (
+                <div className="mobile-only" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1002 }}>
+                    <div style={{ width: '80%', height: '100%', backgroundColor: '#fff', padding: '2rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <h2 style={{ fontSize: '1.2rem' }}>MENU</h2>
+                            <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', fontWeight: '500' }}>
+                            <Link to="/" onClick={() => setIsMenuOpen(false)}>ANA SƏHİFƏ</Link>
+                            <Link to="/" onClick={() => setIsMenuOpen(false)}>KATALOG</Link>
+                            <Link to="/" onClick={() => setIsMenuOpen(false)}>YENİ MƏHSULLAR</Link>
+                            <Link to="/" onClick={() => setIsMenuOpen(false)}>ENDİRİMLƏR</Link>
+                            <Link to="/cart" onClick={() => setIsMenuOpen(false)}>SƏBƏT ({cartCount})</Link>
+                            {!isLoggedIn && <Link to="/login" onClick={() => setIsMenuOpen(false)}>DAXİL OL</Link>}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .desktop-only { display: none !important; }
+                    .mobile-only { display: flex !important; }
+                    .nav-text { display: none; }
+                    .floating-side-nav { width: 40px; }
+                    .side-nav-item { width: 40px; height: 50px; }
+                }
+            `}</style>
         </div>
     )
 }
