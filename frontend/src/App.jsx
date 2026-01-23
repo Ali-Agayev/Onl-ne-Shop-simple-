@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Cart from './pages/Cart'
 import ProductDetail from './pages/ProductDetail'
+import Footer from './components/Footer'
 import './index.css'
 
 function App() {
@@ -22,9 +23,7 @@ function App() {
             <Route path="/product/:slug" element={<ProductDetail />} />
           </Routes>
         </main>
-        <footer style={{ padding: '2rem', textAlign: 'center', borderTop: '1px solid var(--border)', marginTop: '4rem' }}>
-          <p className="text-muted">© 2026 Laihe Store. Premium Experience.</p>
-        </footer>
+        <Footer />
       </div>
     </Router>
   )
