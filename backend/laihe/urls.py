@@ -27,7 +27,20 @@ router = DefaultRouter()
 router.register(r'products', ProductViewSet, basename='api-product')
 router.register(r'categories', CategoryViewSet, basename='api-category')
 
+from django.http import JsonResponse
+
+def api_root(request):
+    return JsonResponse({
+        "message": "LAIHE API Server is running successfully!",
+        "status": "active",
+        "frontend_url": "http://localhost:5173",
+        "admin_url": "/admin/"
+    })
+
 urlpatterns = [
+    # Root URL -> API Status message
+    path('', api_root, name='api-root'),
+
     # API URL-ləri
     path('api/', include(router.urls)),
     path('api/accounts/', include('accounts.urls')),

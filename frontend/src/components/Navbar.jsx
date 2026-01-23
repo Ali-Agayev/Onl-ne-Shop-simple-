@@ -7,12 +7,14 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [cartCount, setCartCount] = useState(0)
+    const [userData, setUserData] = useState(null)
     const navigate = useNavigate()
     const isLoggedIn = !!localStorage.getItem('access_token')
 
     useEffect(() => {
         if (isLoggedIn) {
             fetchCartCount()
+            fetchUserData()
         }
     }, [isLoggedIn])
 
@@ -22,6 +24,15 @@ const Navbar = () => {
             setCartCount(res.data.items.length)
         } catch (error) {
             console.error("Error fetching cart count:", error)
+        }
+    }
+
+    const fetchUserData = async () => {
+        try {
+            const res = await api.get('accounts/profile/')
+            setUserData(res.data)
+        } catch (error) {
+            console.error("Error fetching user data:", error)
         }
     }
 
@@ -68,6 +79,11 @@ const Navbar = () => {
                     </form>
 
                     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                        {userData?.is_staff && (
+                            <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.9rem', fontWeight: '600', color: 'var(--primary)' }}>
+                                Admin
+                            </a>
+                        )}
                         <Link to="/cart" style={{ position: 'relative' }}>
                             <ShoppingCart size={22} />
                             {cartCount > 0 && (
